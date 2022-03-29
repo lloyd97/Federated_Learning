@@ -51,7 +51,7 @@ class Kmeans_cluster:
         self.n_client = n_client
        
     #Creating cluster
-    def getElbowCurve(coordinate):
+    def getElbowCurve(self,coordinate):
         self.best_k = 3
         self.n_leader = self.best_k
         distortions = []
@@ -71,35 +71,35 @@ class Kmeans_cluster:
         plt.show()
         return self.best_k
 
-    def createCluster(n_leader,coordinate):
+    def createCluster(self,n_leader,coordinate):
         self.kmeans = KMeans(n_clusters=n_leader)
         self.kmeans.fit(coordinate)
 
         #print(str('Center coordinate of each cluster')+str(kmeans.cluster_centers_))
         print(str('labels of clusters: ')+str(self.kmeans.labels_))
-        plotCluster(self.kmeans,coordinate)
+        self.plotCluster(self.kmeans,coordinate)
         return self.kmeans
 
-    def plotCluster(kmeans,coordinate):
+    def plotCluster(self,kmeans,coordinate):
         plt.scatter(coordinate[:,0],coordinate[:,1], c=kmeans.labels_, cmap='viridis')
         plt.scatter(kmeans.cluster_centers_[:,0] ,kmeans.cluster_centers_[:,1], color='black')
 
-    def initiaiseClusterCoordinates(kmeans):
-        cluster_coords = [[] for _ in range(n_leader)]
+    def initiaiseClusterCoordinates(self,kmeans):
+        cluster_coords = [[] for _ in range(self.n_leader)]
         for i in range(int(self.n_leader)):    
             for j in range(len(self.kmeans.labels_)):
                 if (self.kmeans.labels_[j] == i):
                     cluster_coords[i].append(j)
         return cluster_coords
 
-    def getClientList(cluster_coords):
+    def getClientList(self,cluster_coords):
         client_size = cluster_coords
         
         for i in range(int(self.n_leader)):
             self.client_list.append(len(client_size[i]))
         return self.client_list
 
-    def fillingNoneValue(cluster_coords):
+    def fillingNoneValue(self,cluster_coords):
         for i in range(int(self.best_k)):
             for j in range(int(self.n_client - len(cluster_coords[i]))):
                 cluster_coords[i].append(None)
